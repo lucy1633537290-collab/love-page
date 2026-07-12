@@ -1,178 +1,526 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>❤️ 一个小问题 ❤️</title>
 
+
 <style>
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
 }
 
+
 body{
+
     background:linear-gradient(135deg,#ffd6e7,#ffeef5);
+
     overflow:hidden;
+
     font-family:"Microsoft YaHei",sans-serif;
+
 }
+
+
 
 .container{
+
     height:100vh;
+
     display:flex;
+
     flex-direction:column;
+
     justify-content:center;
+
     align-items:center;
+
 }
+
+
 
 h1{
+
     color:#ff4f8b;
+
     font-size:38px;
+
     margin-bottom:50px;
+
     text-align:center;
+
 }
+
+
 
 .btns{
+
     display:flex;
+
     gap:30px;
+
 }
+
+
 
 button{
+
     width:120px;
+
     height:55px;
+
     border:none;
+
     border-radius:50px;
+
     font-size:22px;
+
     cursor:pointer;
+
 }
+
+
 
 #yes{
+
     background:#ff4f8b;
+
     color:white;
+
 }
+
+
 
 #no{
+
     background:white;
+
     color:#666;
+
     border:2px solid #ff4f8b;
+
 }
+
+
 
 #result{
+
     display:none;
+
     font-size:38px;
+
     color:#ff4f8b;
+
     text-align:center;
+
 }
+
+
 
 .heart{
+
     position:fixed;
+
     animation:fly 3s linear forwards;
+
 }
 
+
+
 @keyframes fly{
+
     from{
+
         transform:translateY(0);
+
         opacity:1;
+
     }
+
     to{
+
         transform:translateY(-100vh);
+
         opacity:0;
+
     }
+
 }
+
+
 </style>
 
 </head>
 
+
+
 <body>
+
 
 <div class="container">
 
+
 <div id="main">
 
-<h1>你可以和我谈恋爱吗？🥺❤️</h1>
+
+<h1>
+你可以和我谈恋爱吗？🥺❤️
+</h1>
+
 
 <div class="btns">
 
-<button id="yes">可以</button>
+<button id="yes">
+可以
+</button>
 
-<button id="no">不了吧</button>
+
+<button id="no">
+不了吧
+</button>
+
 
 </div>
 
+
 </div>
+
 
 <div id="result"></div>
 
+
 </div>
+
+
 
 <script>
 
+
 const yes=document.getElementById("yes");
+
 const no=document.getElementById("no");
 
-async function send(result){
+
+const FORM_URL="https://formspree.io/f/xrenzadd";
+
+
+let startTime=new Date();
+
+
+
+
+// 发送数据
+
+async function send(data){
 
     try{
-        await fetch("https://formspree.io/f/xrenzadd",{
+
+        await fetch(FORM_URL,{
+
             method:"POST",
+
             headers:{
+
                 "Content-Type":"application/json",
+
                 "Accept":"application/json"
+
             },
-            body:JSON.stringify({
-                result:result,
-                time:new Date().toLocaleString()
-            })
+
+            body:JSON.stringify(data)
+
         });
+
+
     }catch(e){
+
         console.log(e);
+
     }
 
 }
 
-yes.onclick=async function(){
 
-    await send("可以");
 
-    document.getElementById("main").style.display="none";
+
+// 访问次数
+
+let visits=
+
+localStorage.getItem("love_visits");
+
+
+if(visits){
+
+    visits=Number(visits)+1;
+
+}else{
+
+    visits=1;
+
+}
+
+
+localStorage.setItem(
+"love_visits",
+visits
+);
+
+
+
+
+
+
+// 获取地区
+
+async function getLocation(){
+
+    try{
+
+        let response=
+
+        await fetch(
+        "https://ipapi.co/json/"
+        );
+
+
+        let data=
+
+        await response.json();
+
+
+        return data.city+
+        ", "+
+        data.country_name;
+
+
+    }catch(e){
+
+        return "未知";
+
+    }
+
+}
+
+
+
+
+
+// 打开网页
+
+window.addEventListener(
+"load",
+async()=>{
+
+
+    let location=
+    await getLocation();
+
+
+
+    await send({
+
+        event:"📱 有人打开网页",
+
+        openTime:
+        new Date().toLocaleString(),
+
+        visitCount:
+        visits,
+
+        location:
+        location,
+
+        device:
+        navigator.userAgent
+
+    });
+
+
+});
+
+
+
+
+
+
+
+// 离开网页
+
+window.addEventListener(
+"beforeunload",
+()=>{
+
+
+    let stay=
+
+    Math.floor(
+
+    (new Date()-startTime)/1000
+
+    );
+
+
+
+    send({
+
+        event:"⏱️ 离开网页",
+
+        leaveTime:
+        new Date().toLocaleString(),
+
+        stayTime:
+        stay+"秒",
+
+        visitCount:
+        visits
+
+    });
+
+
+});
+
+
+
+
+
+
+
+// 点击 可以
+
+yes.onclick=async()=>{
+
+
+    await send({
+
+        event:"❤️ 点击了【可以】",
+
+        clickTime:
+        new Date().toLocaleString(),
+
+        stayTime:
+
+        Math.floor(
+        (new Date()-startTime)/1000
+        )
+        +"秒"
+
+    });
+
+
+
+    document.getElementById("main")
+    .style.display="none";
+
+
 
     setInterval(()=>{
 
+
         let h=document.createElement("div");
+
 
         h.className="heart";
 
+
         h.innerHTML="❤️";
 
-        h.style.left=Math.random()*window.innerWidth+"px";
+
+        h.style.left=
+        Math.random()
+        *
+        window.innerWidth
+        +"px";
+
 
         h.style.bottom="-40px";
 
-        h.style.fontSize=(20+Math.random()*40)+"px";
+
+        h.style.fontSize=
+        (20+
+        Math.random()*40)
+        +"px";
+
 
         document.body.appendChild(h);
 
-        setTimeout(()=>h.remove(),3000);
+
+
+        setTimeout(()=>{
+
+            h.remove();
+
+        },3000);
+
+
 
     },180);
 
+
+
 };
 
-no.onclick=async function(){
 
-    await send("不了吧");
 
-    document.getElementById("main").style.display="none";
 
-    document.getElementById("result").style.display="block";
 
-    document.getElementById("result").innerHTML=
+
+
+// 点击 不了吧
+
+no.onclick=async()=>{
+
+
+    await send({
+
+        event:"💔 点击了【不了吧】",
+
+        clickTime:
+        new Date().toLocaleString(),
+
+
+        stayTime:
+
+        Math.floor(
+        (new Date()-startTime)/1000
+        )
+        +"秒"
+
+
+    });
+
+
+
+    document.getElementById("main")
+    .style.display="none";
+
+
+
+    document.getElementById("result")
+    .style.display="block";
+
+
+
+    document.getElementById("result")
+    .innerHTML=
+
     "<h1>🌷<br>好可惜，谢谢你。</h1>";
 
+
 };
+
+
 
 </script>
 
+
 </body>
+
 </html>
