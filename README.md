@@ -1,1 +1,1 @@
-# love-page
+# Thank you. Goodbye.
