@@ -1,25 +1,48 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<title>❤️</title>
-<style>
-body{
-    background:#ffe6f0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    margin:0;
-    font-family:sans-serif;
-}
-h1{
-    color:#ff4d88;
-    font-size:40px;
-}
-</style>
-</head>
-<body>
-<h1>❤️ 我爱你 ❤️</h1>
-</body>
-</html>
+<script>
+
+const yes=document.getElementById("yes");
+const no=document.getElementById("no");
+
+yes.onclick=function(){
+
+document.getElementById("main").style.display="none";
+
+document.getElementById("result").style.display="block";
+
+document.getElementById("result").innerHTML=
+"<h1>🎉 太开心啦！<br>以后请多多指教！❤️</h1>";
+
+setInterval(()=>{
+
+let h=document.createElement("div");
+
+h.className="heart";
+
+h.innerHTML="❤️";
+
+h.style.left=Math.random()*window.innerWidth+"px";
+
+h.style.bottom="-30px";
+
+h.style.fontSize=(20+Math.random()*30)+"px";
+
+document.body.appendChild(h);
+
+setTimeout(()=>h.remove(),3000);
+
+},200);
+
+};
+
+no.onclick=function(){
+
+document.getElementById("main").style.display="none";
+
+document.getElementById("result").style.display="block";
+
+document.getElementById("result").innerHTML=
+"<h1>🌷 好可惜<br>谢谢你。</h1>";
+
+};
+
+</script>
