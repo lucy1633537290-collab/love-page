@@ -1,48 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>❤️ 一个小问题 ❤️</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:linear-gradient(135deg,#ffd6e7,#ffeef5);
+    overflow:hidden;
+    font-family:"Microsoft YaHei",sans-serif;
+}
+
+.container{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+h1{
+    color:#ff4f8b;
+    font-size:38px;
+    margin-bottom:50px;
+    text-align:center;
+}
+
+.btns{
+    display:flex;
+    gap:30px;
+}
+
+button{
+    width:120px;
+    height:55px;
+    border:none;
+    border-radius:50px;
+    font-size:22px;
+    cursor:pointer;
+}
+
+#yes{
+    background:#ff4f8b;
+    color:white;
+}
+
+#no{
+    background:white;
+    color:#666;
+    border:2px solid #ff4f8b;
+}
+
+#result{
+    display:none;
+    font-size:38px;
+    color:#ff4f8b;
+    text-align:center;
+}
+
+.heart{
+    position:fixed;
+    animation:fly 3s linear forwards;
+}
+
+@keyframes fly{
+    from{
+        transform:translateY(0);
+        opacity:1;
+    }
+    to{
+        transform:translateY(-100vh);
+        opacity:0;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="main">
+
+<h1>你可以和我谈恋爱吗？🥺❤️</h1>
+
+<div class="btns">
+
+<button id="yes">可以</button>
+
+<button id="no">不了吧</button>
+
+</div>
+
+</div>
+
+<div id="result"></div>
+
+</div>
+
 <script>
 
 const yes=document.getElementById("yes");
 const no=document.getElementById("no");
 
-yes.onclick=function(){
+async function send(result){
 
-document.getElementById("main").style.display="none";
+    try{
+        await fetch("https://formspree.io/f/xrenzadd",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json",
+                "Accept":"application/json"
+            },
+            body:JSON.stringify({
+                result:result,
+                time:new Date().toLocaleString()
+            })
+        });
+    }catch(e){
+        console.log(e);
+    }
 
-document.getElementById("result").style.display="block";
+}
 
-document.getElementById("result").innerHTML=
-"<h1>❤️</h1>";
+yes.onclick=async function(){
 
-setInterval(()=>{
+    await send("可以");
 
-let h=document.createElement("div");
+    document.getElementById("main").style.display="none";
 
-h.className="heart";
+    setInterval(()=>{
 
-h.innerHTML="❤️";
+        let h=document.createElement("div");
 
-h.style.left=Math.random()*window.innerWidth+"px";
+        h.className="heart";
 
-h.style.bottom="-30px";
+        h.innerHTML="❤️";
 
-h.style.fontSize=(20+Math.random()*30)+"px";
+        h.style.left=Math.random()*window.innerWidth+"px";
 
-document.body.appendChild(h);
+        h.style.bottom="-40px";
 
-setTimeout(()=>h.remove(),3000);
+        h.style.fontSize=(20+Math.random()*40)+"px";
 
-},200);
+        document.body.appendChild(h);
+
+        setTimeout(()=>h.remove(),3000);
+
+    },180);
 
 };
 
-no.onclick=function(){
+no.onclick=async function(){
 
-document.getElementById("main").style.display="none";
+    await send("不了吧");
 
-document.getElementById("result").style.display="block";
+    document.getElementById("main").style.display="none";
 
-document.getElementById("result").innerHTML=
-"<h1>🌷 好可惜<br>谢谢你。</h1>";
+    document.getElementById("result").style.display="block";
+
+    document.getElementById("result").innerHTML=
+    "<h1>🌷<br>好可惜，谢谢你。</h1>";
 
 };
 
 </script>
+
+</body>
+</html>
