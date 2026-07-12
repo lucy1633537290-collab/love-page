@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>❤️ 一个小问题 ❤️</title>
+<title>一个小问题</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:linear-gradient(135deg,#ffd6e7,#ffeef5);font-family:Microsoft YaHei,sans-serif;overflow:hidden}
 .container{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px}
 p{color:#666;margin-bottom:18px}
 h1{color:#ff4f8b;margin-bottom:40px}
-.btns{display:flex;gap:30px}
+.btns{display:flex;gap:30px;margin-top:40px;justify-content:center;}
 button{width:120px;height:55px;border:none;border-radius:40px;font-size:22px;cursor:pointer}
 #yes{background:#ff4f8b;color:#fff}#no{background:#fff;color:#666;border:2px solid #ff4f8b}
 #result{display:none;color:#ff4f8b;font-size:34px}
@@ -21,8 +21,10 @@ button{width:120px;height:55px;border:none;border-radius:40px;font-size:22px;cur
 <body>
 <div class="container">
 <div id="main">
-<p>I'm honestly surprised you scanned the QR code and came here. 🥺❤️</p>
-<h1>你可以和我谈恋爱吗？🥺❤️</h1>
+<p>I'm honestly surprised you scanned the QR code and came here.<br><br>
+I still wanted to ask you this one question, because my feelings were real.<br><br>
+Goodbye.</p>
+<h1>你可以和我谈恋爱吗？</h1>
 <div class="btns">
 <button id="yes">可以</button>
 <button id="no">不了吧</button>
@@ -49,22 +51,16 @@ window.addEventListener("beforeunload",()=>{
 yes.onclick=async()=>{
  await send({event:"yes",time:new Date().toLocaleString(),staySeconds:Math.floor((Date.now()-start)/1000)});
  document.getElementById("main").style.display="none";
- setInterval(()=>{
-  let h=document.createElement("div");
-  h.className="heart";h.textContent="❤️";
-  h.style.left=Math.random()*innerWidth+"px";
-  h.style.bottom="-40px";
-  h.style.fontSize=(20+Math.random()*40)+"px";
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),3000);
- },180);
+ let r=document.getElementById("result");
+ r.style.display="block";
+ r.innerHTML="<h1>谢谢你的回答。</h1>";
 };
 no.onclick=async()=>{
  await send({event:"no",time:new Date().toLocaleString(),staySeconds:Math.floor((Date.now()-start)/1000)});
  document.getElementById("main").style.display="none";
  let r=document.getElementById("result");
  r.style.display="block";
- r.innerHTML="<h1>🌷<br>好可惜，谢谢你。</h1>";
+ r.innerHTML="<h1>谢谢你的回答。</h1>";
 };
 </script>
 </body>
