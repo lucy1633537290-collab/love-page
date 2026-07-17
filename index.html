@@ -3,65 +3,176 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>一个小问题</title>
+<title>❤️ 一个小问题 ❤️</title>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:linear-gradient(135deg,#ffd6e7,#ffeef5);font-family:Microsoft YaHei,sans-serif;overflow:hidden}
-.container{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px}
-p{color:#666;margin-bottom:18px}
-h1{color:#ff4f8b;margin-bottom:40px}
-.btns{display:flex;gap:30px;margin-top:40px;justify-content:center;}
-button{width:120px;height:55px;border:none;border-radius:40px;font-size:22px;cursor:pointer}
-#yes{background:#ff4f8b;color:#fff}#no{background:#fff;color:#666;border:2px solid #ff4f8b}
-#result{display:none;color:#ff4f8b;font-size:34px}
-.heart{position:fixed;animation:fly 3s linear forwards}
-@keyframes fly{from{transform:translateY(0);opacity:1}to{transform:translateY(-100vh);opacity:0}}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:linear-gradient(135deg,#ffd6e7,#ffeef5);
+    overflow:hidden;
+    font-family:"Microsoft YaHei",sans-serif;
+}
+
+.container{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+h1{
+    color:#ff4f8b;
+    font-size:38px;
+    margin-bottom:50px;
+    text-align:center;
+}
+
+.btns{
+    display:flex;
+    gap:30px;
+}
+
+button{
+    width:120px;
+    height:55px;
+    border:none;
+    border-radius:50px;
+    font-size:22px;
+    cursor:pointer;
+}
+
+#yes{
+    background:#ff4f8b;
+    color:white;
+}
+
+#no{
+    background:white;
+    color:#666;
+    border:2px solid #ff4f8b;
+}
+
+#result{
+    display:none;
+    font-size:38px;
+    color:#ff4f8b;
+    text-align:center;
+}
+
+.heart{
+    position:fixed;
+    animation:fly 3s linear forwards;
+}
+
+@keyframes fly{
+    from{
+        transform:translateY(0);
+        opacity:1;
+    }
+    to{
+        transform:translateY(-100vh);
+        opacity:0;
+    }
+}
 </style>
+
 </head>
+
 <body>
+
 <div class="container">
+
 <div id="main">
-<p>I'm honestly surprised you scanned the QR code and came here.<br><br>
-I still wanted to ask you this one question, because my feelings were real.<br><br>
-Goodbye.</p>
-<h1>你可以和我谈恋爱吗？</h1>
+
+<h1>你可以和我谈恋爱吗？🥺❤️</h1>
+
 <div class="btns">
+
 <button id="yes">可以</button>
+
 <button id="no">不了吧</button>
+
 </div>
+
 </div>
+
 <div id="result"></div>
+
 </div>
+
 <script>
-const FORM_URL="https://formspree.io/f/xrenzadd";
+
 const yes=document.getElementById("yes");
 const no=document.getElementById("no");
-const start=Date.now();
-async function send(d){try{await fetch(FORM_URL,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(d)})}catch(e){}}
-let visits=Number(localStorage.getItem("love_visits")||0)+1;
-localStorage.setItem("love_visits",visits);
-async function loc(){try{let r=await fetch("https://ipapi.co/json/");let j=await r.json();return j.city+", "+j.country_name}catch(e){return "Unknown"}}
-window.addEventListener("load",async()=>{
- let location=await loc();
- await send({event:"opened",time:new Date().toLocaleString(),visits,location,userAgent:navigator.userAgent});
-});
-window.addEventListener("beforeunload",()=>{
- navigator.sendBeacon(FORM_URL,JSON.stringify({event:"leave",staySeconds:Math.floor((Date.now()-start)/1000),time:new Date().toLocaleString()}));
-});
-yes.onclick=async()=>{
- await send({event:"yes",time:new Date().toLocaleString(),staySeconds:Math.floor((Date.now()-start)/1000)});
- document.getElementById("main").style.display="none";
- let r=document.getElementById("result");
- r.style.display="block";
- r.innerHTML="<h1>谢谢你的回答。</h1>";
+
+async function send(result){
+
+    try{
+        await fetch("https://formspree.io/f/xrenzadd",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json",
+                "Accept":"application/json"
+            },
+            body:JSON.stringify({
+                result:result,
+                time:new Date().toLocaleString()
+            })
+        });
+    }catch(e){
+        console.log(e);
+    }
+
+}
+
+yes.onclick=async function(){
+
+    await send("可以");
+
+    document.getElementById("main").style.display="none";
+
+    setInterval(()=>{
+
+        let h=document.createElement("div");
+
+        h.className="heart";
+
+        h.innerHTML="❤️";
+
+        h.style.left=Math.random()*window.innerWidth+"px";
+
+        h.style.bottom="-40px";
+
+        h.style.fontSize=(20+Math.random()*40)+"px";
+
+        document.body.appendChild(h);
+
+        setTimeout(()=>h.remove(),3000);
+
+    },180);
+
 };
-no.onclick=async()=>{
- await send({event:"no",time:new Date().toLocaleString(),staySeconds:Math.floor((Date.now()-start)/1000)});
- document.getElementById("main").style.display="none";
- let r=document.getElementById("result");
- r.style.display="block";
- r.innerHTML="<h1>谢谢你的回答。</h1>";
+
+no.onclick=async function(){
+
+    await send("不了吧");
+
+    document.getElementById("main").style.display="none";
+
+    document.getElementById("result").style.display="block";
+
+    document.getElementById("result").innerHTML=
+    "<h1>🌷<br>好可惜，谢谢你。</h1>";
+
 };
+
 </script>
+
 </body>
 </html>
